@@ -6,11 +6,11 @@
 typedef struct string_with_length{
     uint8_t *str;
     size_t len;
-} strlen;
+} strlen_s;
 
 uint8_t *s_var_from_stdin (uint8_t, size_t *, size_t *);
-uint8_t get_and_create_word (strlen *, int, uint8_t *);
-void print_strlen (strlen *);
+uint8_t get_and_create_word (strlen_s *, int, uint8_t *);
+void print_strlen_s (strlen_s *);
 
 
 int main (int argc, char **argv)
@@ -25,7 +25,7 @@ int main (int argc, char **argv)
         printf("PIC, OOM!\n");
         return 2;
     }
-    strlen *res = malloc(sizeof(strlen));
+    strlen_s *res = malloc(sizeof(strlen_s));
     assert(res != NULL);
     
     failure = get_and_create_word(res, len, input);
@@ -36,7 +36,7 @@ int main (int argc, char **argv)
         free(res);
         return 1;
     } else {
-        print_strlen(res);
+        print_strlen_s(res);
         return 0;
     }
 }
@@ -107,12 +107,12 @@ fail:
 }
 
 /*
- ** Function which takes an input a string and its length and finds the first
- ** substring from index to to n, where at the n-th position a whitespace is
+ ** Function which takes as input a string and its length. It finds the first
+ ** substring from index 0 to n, where at the n-th position a whitespace is
  ** encountered.
- ** Return 0 if all went well, else return 1.
+ ** Return 0 if all went well, else return 1 on error.
  */
-uint8_t get_and_create_word (strlen *res, int len, uint8_t *str)
+uint8_t get_and_create_word (strlen_s *res, int len, uint8_t *str)
 {
     // get the length of the substring in question by simple iteration
     for ((*res).len = 0; (*res).len < len; ++((*res).len)) {
@@ -139,7 +139,7 @@ uint8_t get_and_create_word (strlen *res, int len, uint8_t *str)
 /*
  ** Function which prints the struct string_with_length.
  */
-void print_strlen (strlen *res)
+void print_strlen_s (strlen_s *res)
 {
     printf("String length: %" PRIu64"\nString content: ", (*res).len);
     for (size_t i = 0; i < (*res).len; ++i)

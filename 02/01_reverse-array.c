@@ -5,7 +5,7 @@
 #define XOR 1
 
 void reverse_array(size_t, uint32_t *);
-uint8_t *s_var_from_stdin (uint8_t, size_t *, size_t *);
+uint8_t *s_var_from_stdin (uint8_t, size_t *, size_t *);
 uint32_t *from_cmdline(int, char **, size_t *);
 uint32_t *from_string(size_t, uint8_t *, size_t *);
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
         size_t len = 0;
         size_t size = 0;
         uint32_t *input = v_var_from_stdin(1, &len, &size);
-        if (input = NULL) {
+        if (input == NULL) {
             printf("PIC, OOM!\n");
             return 2;
         }
