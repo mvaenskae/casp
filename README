@@ -1,0 +1,3 @@
+This is a collection of my own answers for the course "Computer architecture and systems programming" for the winter semestre 2014 at the ETH Zurich. All answers are given as-is and I don't guarantee them to be fool-proof and "secure" in terms of an error the program to degrade gracefully.
+A small note, the lecture uses amd64 as the base arch and gcc+glibc are the default compilers/c-libraries.
+If you see something you like just feel free to use it. No need to ask me for permission but please share your improved answer as well so that everyone can profit from great code. Writing good code is hard as everyone should know so the more the merrier to improve your skills :)
