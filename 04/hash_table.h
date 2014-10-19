@@ -87,7 +87,6 @@ void  hash_insert(struct hash_table *t, const char* key, void *data);
     struct hash_elem *elem = find_elem(*t, *key);
     if (elem == NULL) {
         struct hash_elem *last = find_last(*t, hash);
-        find_last(*t, *key);
         (*new_elem).key = key;
         (*new_elem).data = data;
         (*new_elem).hash = hash;
