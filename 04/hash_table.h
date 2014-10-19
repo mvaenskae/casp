@@ -57,7 +57,11 @@ void  hash_create(struct hash_table **t, hash_data_free_fn f);
  * Releases the entire hash table, including all its entries properly.
  * @param  t The hash table to dispose.
  */
-void  hash_release(struct hash_table *t);
+void  hash_release(struct hash_table *t)
+{
+    for (int i = 0; i < (*t).num_buckets; ++i) {
+        // iterate over all elements of each bucket
+    }
 
 /**
  * Inserts a key/value pair into the hash-table.
@@ -73,7 +77,16 @@ void  hash_insert(struct hash_table *t, const char* key, void *data);
  * @param key Key of the corresponding element.
  * @returns Corresponding data entry or NULL in case the key does not exist.
  */
-void* hash_find(struct hash_table *t, const char* key);
+void* hash_find(struct hash_table *t, const char* key)
+{
+    struct hash_elem *current;
+    //find current element
+    
+    if (current == NULL) {
+        return NULL;
+    }
+    return (*current).data;
+}
 
 /**
  * Deletes an element in the hash-table. This function should also call the
@@ -81,6 +94,51 @@ void* hash_find(struct hash_table *t, const char* key);
  * @param  t   Hash table to delete from.
  * @param  key Key to delete. Does nothing if key does not exist.
  */
-void  hash_delete(struct hash_table *t, const char* key);
+void  hash_delete(struct hash_table *t, const char* key)
+{
+    struct hash_elem *current, *parent, *child;
+    //find the current element's parent
+    
+    if ((*parent).next == NULL) {
+        return;
+    }
+    (*parent).next = (*current).next;
+    free((char *) (*current).key);
+    free((*current).data);
+    free(current);
+}
+
+/*
+ ** This function finds the correct bucket to be hashing the key into.
+ ** @param  t   Hash table to hash into
+ ** @param  key Key to hash
+ ** @return Bucket number in which to put the key
+ */
+size_t hash_value(struct hash_table *t, const char* key)
+{
+    const size_t mers_prime = 31;
+    size_t len = 0;
+    for(; *(key + len) != '\0'; ++len){};
+    
+    size_t hash = 0;
+    for (int i = 0; i < len; ++i) {
+        hash = (mers_prime * hash + *(key + i)) % (*t).num_buckets;
+    }
+    return hash;
+}
+
+/*
+ ** Function which iterates over the bucket in which key should be found.
+ ** @param  t   Hash table to check for the key
+ ** @param  key Key for which to search
+ ** @return If the key is found return a pointer to it, else return NULL;
+ */
+struct *hash_elem find_elem(struct hash_table *t, const char* key)
+{
+    size_t bucket = hash_value(*t, *key);
+    struct *hash_elem result = NULL;
+    //iterate over the buckets here until the one with *key is found)
+    return result;
+}
 
 #endif
