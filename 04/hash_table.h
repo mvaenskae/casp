@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #ifndef _HASH_TABLE_H_
 #define _HASH_TABLE_H_
 
@@ -44,6 +45,10 @@ struct hash_elem {
 
     // Pointer that points to next hash_elem in case of collisions
     struct hash_elem* next;
+
+    // Extra fields
+    struct hash_elem* prev;
+    size_t hash;
 };
 
 /**
@@ -51,7 +56,10 @@ struct hash_elem {
  * @param  t The pointer is either set to the new allocated hash table or NULL in case of an error.
  * @param  f User provided function that frees deleted hash table entries. Can be NULL.
  */
-void  hash_create(struct hash_table **t, hash_data_free_fn f);
+void  hash_create(struct hash_table **t, hash_data_free_fn f)
+{
+    // WÄT?!
+}
 
 /**
  * Releases the entire hash table, including all its entries properly.
@@ -60,7 +68,10 @@ void  hash_create(struct hash_table **t, hash_data_free_fn f);
 void  hash_release(struct hash_table *t)
 {
     for (int i = 0; i < (*t).num_buckets; ++i) {
-        // iterate over all elements of each bucket
+        struct hash_elem *cur = NULL;
+        for (cur = *((*t).buckets + i); cur != NULL; cur = (*cur).next) {
+            //free
+        }
     }
 
 /**
@@ -70,6 +81,28 @@ void  hash_release(struct hash_table *t)
  * @param  data Data for corresponding key.
  */
 void  hash_insert(struct hash_table *t, const char* key, void *data);
+{
+    size_t hash = hash_value(*t, *key);
+    struct hash_elem *new_elem = (struct hash_elem *) malloc(sizeof(struct hash_elem));
+    struct hash_elem *elem = find_elem(*t, *key);
+    if (elem == NULL) {
+        struct hash_elem *last = find_last(*t, hash);
+        find_last(*t, *key);
+        (*new_elem).key = key;
+        (*new_elem).data = data;
+        (*new_elem).hash = hash;
+        (*new_elem).next = NULL;
+        (*new_elem).prev = last;
+        if (last != NULL) {
+            (*last).next = new_elem;
+        } else {
+            *((*t).buckets + hash) = new_elem;
+        }
+    } else if ((*new_elem).key == (*elem).key) {
+        free((*elem).data);
+        (*elem).data = data;
+    }
+}
 
 /**
  * Finds an element in the hash-table.
@@ -77,10 +110,11 @@ void  hash_insert(struct hash_table *t, const char* key, void *data);
  * @param key Key of the corresponding element.
  * @returns Corresponding data entry or NULL in case the key does not exist.
  */
+// DONE
 void* hash_find(struct hash_table *t, const char* key)
 {
     struct hash_elem *current;
-    //find current element
+    *current = find_elem(*t, *key);
     
     if (current == NULL) {
         return NULL;
@@ -94,26 +128,33 @@ void* hash_find(struct hash_table *t, const char* key)
  * @param  t   Hash table to delete from.
  * @param  key Key to delete. Does nothing if key does not exist.
  */
+//DONE
 void  hash_delete(struct hash_table *t, const char* key)
 {
-    struct hash_elem *current, *parent, *child;
-    //find the current element's parent
-    
-    if ((*parent).next == NULL) {
+    struct hash_elem *current, *parent;
+    *current = find_elem(*t, *key);
+    if (current == NULL) {
         return;
     }
-    (*parent).next = (*current).next;
+    parent = (*current).prev;
+
+    if (parent == NULL) {
+        *((*t).buckets + (*current).hash) = (*current).next;
+    } else {
+        (*parent).next = (*current).next;
+    }
     free((char *) (*current).key);
     free((*current).data);
-    free(current);
+    free(*current);
 }
 
 /*
  ** This function finds the correct bucket to be hashing the key into.
  ** @param  t   Hash table to hash into
  ** @param  key Key to hash
- ** @return Bucket number in which to put the key
+ ** @return     Bucket number in which to put the key
  */
+//DONE
 size_t hash_value(struct hash_table *t, const char* key)
 {
     const size_t mers_prime = 31;
@@ -131,14 +172,29 @@ size_t hash_value(struct hash_table *t, const char* key)
  ** Function which iterates over the bucket in which key should be found.
  ** @param  t   Hash table to check for the key
  ** @param  key Key for which to search
- ** @return If the key is found return a pointer to it, else return NULL;
+ ** @return     If the key is found return a pointer to it, else return NULL;
  */
-struct *hash_elem find_elem(struct hash_table *t, const char* key)
+//DONE
+struct hash_elem *find_elem(struct hash_table *t, const char* key)
 {
     size_t bucket = hash_value(*t, *key);
-    struct *hash_elem result = NULL;
-    //iterate over the buckets here until the one with *key is found)
-    return result;
+    struct hash_elem *cur = NULL;
+    for (cur = *((*t).buckets + bucket); cur != NULL && (*cur).key != key; cur = (*cur).next) {};
+    return cur;
+}
+
+/*
+ ** Function which iterates over a bucket and returns the last element.
+ ** @param  t       Hash table to work in
+ ** @param  bucket  Bucket identifier
+ ** @return         If there exists a key in the bucket, return a pointer to
+ **                 the last, else return NULL.
+ */
+struct hash_elem *find_last(struct hash_table *t, const size_t bucket)
+{
+    struct hash_elem *cur = NULL;
+    for (cur *((*t).buckets + bucket); cur != NULL && (*cur).next != NULL; cur = (*cur).next) {};
+    return cur;
 }
 
 #endif
