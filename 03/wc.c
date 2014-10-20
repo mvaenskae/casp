@@ -29,11 +29,25 @@ int main(int argc, char* argv[])
             exit(-1);
         }
         nc = nw = nl = 0;
+        int in = 0;
         while ((c = getc(fp)) != EOF)
         {
-            /*TODO:FILL HERE
-             process the file using getc(fp)
-             */
+            ++nc;
+            if (c == '\n') {
+                ++nl;
+                continue;
+            }
+            if (c == ' ') {
+                if (in == 1) {
+                    ++nw;
+                    in = 0;
+                }
+                continue;
+            //} else if ((c == '\'' || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) && in == 0) {
+            } else if (((c >= '!' && c <= '~') || (c > ('~' + 1))) && in == 0) {
+                in = 1;
+                continue;
+            }
         }
         /*print totals*/
         printf("%ld %ld %ld %s\n", nl, nw, nc, currfile);
