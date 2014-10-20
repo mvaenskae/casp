@@ -70,7 +70,6 @@ cmp_set *alloc_set(cmp_num *c_arr, int size)
     set->num_points_in_set = size;
     assert(size > 0);
     set->points = malloc(sizeof(cmp_num) * (unsigned) size);
-    //fill array?
     set->points = c_arr;
     return set;
 }
