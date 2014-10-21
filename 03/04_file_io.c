@@ -36,14 +36,14 @@ int main(int argc, char **argv)
     // More fun trying to decipher when drunk!
     for(char c = EOF; (c = getc(fp)) != EOF; ) {
         if (c == '\n') {
-            char *t = NULL;
+            char *t = malloc(sizeof(char) * 5);
             if (fgets(t, 5, fp) != NULL) {
                 if (strcmp(t, origin)) {
                     uint8_t i = 0;
                     stapo *elem = malloc(sizeof(stapo));
                     (list->count)++;
                     list->element[list->count - 1] = *elem;
-                    for (; (c = getc(fp)) != EOF && c != '\n' && c != EOF; ) {
+                    for (; (c = getc(fp)) != EOF && c != '\n'; ) {
                         if (c == '\t') {
                             ++i;
                         }
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
                             s[len] = '\0';
                             elem->state = malloc(sizeof(char) * len);
                             for(int k = 0; k < len; ++k) {
-                                elem->state[i] = s[i];
+                                elem->state[k] = s[k];
                             }
                             free(s);
                             ++i;
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         free((list->element[i]).state);
         free(&(list->element[i]));
     }
-    free(list->element);
+    //free(list->element);
     free(list);
     printf("%34c\n%20s %5c %9zd\n", '-', "TOTAL", ' ', total);
 
