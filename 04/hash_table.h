@@ -1,6 +1,6 @@
-#include <inttypes.h>
 #ifndef _HASH_TABLE_H_
 #define _HASH_TABLE_H_
+#include <inttypes.h>
 
 /**
  * This is the API description for your hashtable data-structure
@@ -58,6 +58,11 @@ struct hash_elem {
  */
 void  hash_create(struct hash_table **t, hash_data_free_fn f)
 {
+    struct hash_table *h = malloc(sizeof(hash_tablle));
+    h->data_free = f;
+    struct hash_elem *he = malloc(sizeof(hash_elem));
+    // check for error
+    h->buckets = he;
     // WÄT?!
 }
 
